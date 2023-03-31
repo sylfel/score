@@ -1,4 +1,5 @@
 import { Container, Graphics, Sprite, Text, TextStyle } from 'pixi.js'
+import gsap from 'gsap'
 import { app } from './main'
 
 export class Player extends Container {
@@ -10,7 +11,7 @@ export class Player extends Container {
   public onLost?: (player: Player) => void
 
   private score = 0
-  private currentScore = 0
+  private animatedScore = 0
 
   constructor(num: number) {
     super()
@@ -27,14 +28,13 @@ export class Player extends Container {
       this.emit('lost', this)
     }, Math.random() * 6000)
 
-    setTimeout(() => {
-      this.score = Math.floor(Math.random() * 1000)
-      console.log(this.num, this.score)
-    }, Math.random() * 6000)
+    setInterval(() => {
+      this.setScore(Math.floor(Math.random() * 100))
+    }, Math.random() * 1000 + 1000)
 
     const style = new TextStyle({
       fontFamily: 'Arial',
-      fontSize: 200,
+      fontSize: 30,
       fontStyle: 'italic',
       fontWeight: 'bold',
       fill: ['#ffffff', '#00ff99'], // gradient
@@ -66,15 +66,41 @@ export class Player extends Container {
     this.image.position.y = height * 0.5
 
     this.text.x = width / 2
+    this.text.style.fontSize = Math.min(width / 3, 150)
+  }
+
+  /** Set the score and play the scores animation */
+  public setScore(value: number) {
+    if (this.score === value) return
+    this.score = value
+    this.playScores()
   }
 
   updateTransform(): void {
     super.updateTransform()
     const delta = app.ticker.deltaTime
     this.image.angle += delta * 0.8
-    if (this.score > this.currentScore) {
-      this.currentScore += 1
-      this.text.text = this.currentScore
+  }
+
+  /** Play score animation, increasing gradually until reaches actual score */
+  private async playScores(): Promise<void> {
+    gsap.killTweensOf(this)
+    await gsap.to(this, {
+      animatedScore: this.score,
+      duration: 0.7,
+      ease: 'expo.out',
+      onUpdate: () => {
+        this.printPoints()
+      },
+    })
+  }
+
+  /** Print currently animated score to the screen */
+  private printPoints(): void {
+    const points = Math.round(this.animatedScore)
+    const text = String(points)
+    if (this.text.text !== text) {
+      this.text.text = text
     }
   }
 }
