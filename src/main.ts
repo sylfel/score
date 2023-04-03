@@ -49,8 +49,8 @@ function init() {
       resize()
       app.stage.addChild(game)
     })
-    .catch(() => {
-      console.log('error')
+    .catch((err) => {
+      console.log('error', err)
     })
 }
 

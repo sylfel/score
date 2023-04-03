@@ -1,12 +1,27 @@
-import { Container, Graphics, Sprite, Text, TextStyle } from 'pixi.js'
+import {
+  Container,
+  Graphics,
+  Rectangle,
+  SCALE_MODES,
+  Sprite,
+  Text,
+  TextStyle,
+  Texture,
+} from 'pixi.js'
+import { FancyButton } from '@pixi/ui'
 import gsap from 'gsap'
 import { app } from './main'
 
+const increments = [1, 5]
+
 export class Player extends Container {
-  public readonly num: number
+  private readonly num: number
   private image: Sprite
   private rectangle: Graphics
   private text: Text
+  private buttons: FancyButton[] = []
+
+  private texture: Texture
 
   public onLost?: (player: Player) => void
 
@@ -16,21 +31,30 @@ export class Player extends Container {
   constructor(num: number) {
     super()
     this.num = num
+
+    this.texture = Texture.from('assets/btns.png')
+    this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST
+
+    const btn1Texture = new Texture(
+      this.texture.baseTexture,
+      new Rectangle(0, 0, 16, 16),
+    )
+    const btn5Texture = new Texture(
+      this.texture.baseTexture,
+      new Rectangle(16, 0, 16, 16),
+    )
+
     this.image = Sprite.from('assets/clampy.png')
     this.image.anchor.set(0.5)
     this.image.angle = 180 * num
 
     this.rectangle = new Graphics()
-    this.addChild(this.rectangle)
+    // this.addChild(this.rectangle)
 
     this.addChild(this.image)
     setTimeout(() => {
       this.emit('lost', this)
     }, Math.random() * 6000)
-
-    setInterval(() => {
-      this.setScore(Math.floor(Math.random() * 100))
-    }, Math.random() * 1000 + 1000)
 
     const style = new TextStyle({
       fontFamily: 'Arial',
@@ -53,6 +77,30 @@ export class Player extends Container {
     this.text.anchor.set(0.5)
     this.text.y = 100
     this.addChild(this.text)
+
+    for (let i = 0; i < 2; i++) {
+      const button = new FancyButton({
+        defaultView: Sprite.from(i === 0 ? btn1Texture : btn5Texture),
+        anchor: 0.5,
+        animations: {
+          pressed: {
+            props: {
+              scale: {
+                x: 0.9,
+                y: 0.9,
+              },
+            },
+            duration: 100,
+          },
+        },
+      })
+
+      button.onPress.connect(() => this.setScore(this.score + increments[i]))
+
+      this.buttons.push(button)
+
+      this.addChild(this.buttons[i])
+    }
   }
 
   public resize(width: number, height: number) {
@@ -67,13 +115,21 @@ export class Player extends Container {
 
     this.text.x = width / 2
     this.text.style.fontSize = Math.min(width / 3, 150)
+    for (let i = 0; i < 2; i++) {
+      this.buttons[i].width = width / 2
+      this.buttons[i].height = height / 4
+      this.buttons[i].x = (width / 4) * (i * 2 + 1)
+      this.buttons[i].y = (height / 4) * 3 + height / 8
+    }
   }
 
   /** Set the score and play the scores animation */
   public setScore(value: number) {
     if (this.score === value) return
     this.score = value
-    this.playScores()
+    this.playScores().catch((err) => {
+      console.error(err)
+    })
   }
 
   updateTransform(): void {
