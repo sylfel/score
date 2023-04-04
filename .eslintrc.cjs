@@ -4,6 +4,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
+  ignorePatterns: ['dist'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: true,
