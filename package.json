@@ -9,7 +9,7 @@
     "build": "assetpack && tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .js,.ts --cache .",
-    "format": "prettier --write --cache ."
+    "format": "prettier --write --cache src"
   },
   "devDependencies": {
     "@assetpack/cli": "^0.6.2",
