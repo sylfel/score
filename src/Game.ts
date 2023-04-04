@@ -11,6 +11,7 @@ export class Game extends Container {
 
     for (let i = 0; i < nbGamer; i++) {
       const player = new Player(i)
+      // @ts-ignore TS2345
       player.on('lost', (player: Player) => this.onLost(player))
       player.position.y = 0
       this.players.push(player)

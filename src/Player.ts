@@ -15,7 +15,7 @@ import { app } from './main'
 const increments = [1, 5]
 
 export class Player extends Container {
-  private readonly num: number
+  public readonly num: number
   private image: Sprite
   private rectangle: Graphics
   private text: Text
@@ -53,6 +53,7 @@ export class Player extends Container {
 
     this.addChild(this.image)
     setTimeout(() => {
+      // @ts-ignore TS2345
       this.emit('lost', this)
     }, Math.random() * 6000)
 
