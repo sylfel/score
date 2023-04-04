@@ -1,5 +1,6 @@
-import { Application, Assets } from 'pixi.js'
+import { Application } from 'pixi.js'
 import { Game } from './Game'
+import { initAssets } from './utils/assets'
 
 /** The PixiJS app Application instance, shared across the project */
 export const app = new Application<HTMLCanvasElement>({
@@ -34,25 +35,17 @@ function resize() {
 }
 
 /** Setup app and initialise assets */
-function init() {
+async function init(): Promise<void> {
   // Add pixi canvas element (app.view) to the document's body
   document.body.appendChild(app.view)
-
+  await initAssets()
   // Whenever the window resizes, call the 'resize' function
   window.addEventListener('resize', resize)
   game = new Game()
 
-  const texturePromise = Assets.load('assets/clampy.png')
-  texturePromise
-    .then(() => {
-      // Trigger the first resize
-      resize()
-      app.stage.addChild(game)
-    })
-    .catch((err) => {
-      console.log('error', err)
-    })
+  resize()
+  app.stage.addChild(game)
 }
 
 // Init everything
-init()
+void init()
