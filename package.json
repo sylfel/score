@@ -9,7 +9,8 @@
     "build": "assetpack && tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .js,.ts --cache .",
-    "format": "prettier --write --cache src"
+    "format": "prettier --write --cache src",
+    "check": "npm run format && npm run lint && tsc"
   },
   "devDependencies": {
     "@assetpack/cli": "^0.6.2",
@@ -24,6 +25,7 @@
     "vite": "^4.2.0"
   },
   "dependencies": {
+    "@assetpack/plugin-texture-packer": "^0.6.2",
     "@pixi/ui": "^0.7.0",
     "gsap": "^3.11.5",
     "pixi.js": "^7.2.3"
