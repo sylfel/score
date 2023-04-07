@@ -6,7 +6,7 @@ export class Score extends Container {
   private score = 0
   private animatedScore = 0
 
-  constructor() {
+  constructor(initialScore: number) {
     super()
     const style = new TextStyle({
       fontFamily: 'Cursive',
@@ -17,6 +17,7 @@ export class Score extends Container {
       strokeThickness: 15,
       lineJoin: 'bevel',
     })
+    this.score = initialScore
     this.text = new Text(this.score, style)
     this.text.anchor.set(0.5)
     this.addChild(this.text)

@@ -15,7 +15,7 @@ export class Player extends Container {
 
   public onLost?: (player: Player) => void
 
-  private currentScore = 0
+  private currentScore = 50
   private score: Score
   private bg: Background
 
@@ -50,13 +50,8 @@ export class Player extends Container {
     this.btnBRTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnBRTexture)
 
-    this.score = new Score()
+    this.score = new Score(this.currentScore)
     this.addChild(this.score)
-
-    setTimeout(() => {
-      // @ts-ignore TS2345
-      this.emit('lost', this)
-    }, Math.random() * 6000)
   }
 
   public resize(width: number, height: number) {
@@ -89,7 +84,11 @@ export class Player extends Container {
   }
 
   private onBtnPress(increment: number): void {
-    this.currentScore = this.currentScore + increment
+    this.currentScore = Math.max(this.currentScore + increment, 0)
     this.score.setScore(this.currentScore)
+    if (this.currentScore === 0) {
+      // @ts-ignore TS2345
+      this.emit('lost', this)
+    }
   }
 }
