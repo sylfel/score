@@ -1,5 +1,6 @@
 import { compressPng } from '@assetpack/plugin-compress'
 import { pixiManifest } from '@assetpack/plugin-manifest'
+import { pixiTexturePacker } from '@assetpack/plugin-texture-packer'
 
 export default {
   entry: './raw-assets',
@@ -8,6 +9,11 @@ export default {
   cache: false,
   plugins: {
     compressPng: compressPng(),
+    texture: pixiTexturePacker({
+      texturePacker: {
+        removeFileExtension: true,
+      },
+    }),
     manifest: pixiManifest({
       output: './public/assets/assets-manifest.json',
     }),
