@@ -1,4 +1,4 @@
-import { Assets, Container, Sprite } from 'pixi.js'
+import { Container, Sprite, Texture } from 'pixi.js'
 import { app } from '../main'
 
 export class Background extends Container {
@@ -8,7 +8,7 @@ export class Background extends Container {
   constructor() {
     super()
 
-    this.image = Sprite.from(Assets.cache.get('clampy.png'))
+    this.image = Sprite.from(Texture.from('clampy'))
     this.image.anchor.set(0.5)
     this.image.angle = Math.random() * 360
     this.speed = Math.random() * 2 - 1

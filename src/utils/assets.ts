@@ -21,5 +21,5 @@ export async function initAssets() {
   // Init PixiJS assets with this asset manifest
   await Assets.init({ manifest: assetsManifest, basePath: 'assets' })
 
-  await Assets.loadBundle('default')
+  await Assets.loadBundle('common')
 }
