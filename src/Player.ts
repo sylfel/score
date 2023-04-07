@@ -1,4 +1,4 @@
-import { Container, Graphics } from 'pixi.js'
+import { Container, Graphics, Text } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { LargeButton } from './ui/LargeButton'
@@ -16,6 +16,8 @@ export class Player extends Container {
   public onLost?: (player: Player) => void
 
   private currentScore = 50
+  private nextIncrement = 0
+  private t = 0
   private score: Score
   private bg: Background
 
@@ -23,6 +25,7 @@ export class Player extends Container {
   private btnTRTexture: LargeButton
   private btnBLTexture: LargeButton
   private btnBRTexture: LargeButton
+  private text: Text
 
   constructor(num: number) {
     super()
@@ -52,6 +55,10 @@ export class Player extends Container {
 
     this.score = new Score(this.currentScore)
     this.addChild(this.score)
+
+    this.text = new Text()
+    this.text.anchor.set(0.5, 0.5)
+    this.addChild(this.text)
   }
 
   public resize(width: number, height: number) {
@@ -81,10 +88,33 @@ export class Player extends Container {
     this.btnBRTexture.height = height / heightBtn
     this.btnBRTexture.x = width * 0.75
     this.btnBRTexture.y = height * ratioY2
+
+    this.text.x = width * 0.5
+    this.text.y = (height * (nbRow - 2)) / nbRow
+    this.text.style.fontSize = Math.max(width * 0.09, height * 0.09)
   }
 
   private onBtnPress(increment: number): void {
-    this.currentScore = Math.max(this.currentScore + increment, 0)
+    this.updateIncrement(this.nextIncrement + increment)
+  }
+
+  private updateIncrement(nextIncrment: number): void {
+    this.nextIncrement = nextIncrment
+    // use a simple debounce to perform increment
+    clearTimeout(this.t)
+    if (this.nextIncrement === 0) {
+      this.text.text = ''
+    } else {
+      this.text.text =
+        (this.nextIncrement < 0 ? '-' : '+') +
+        String(Math.abs(this.nextIncrement))
+      this.t = window.setTimeout(() => this.updateScore(), 1000)
+    }
+  }
+
+  private updateScore(): void {
+    this.currentScore = Math.max(this.currentScore + this.nextIncrement, 0)
+    this.updateIncrement(0)
     this.score.setScore(this.currentScore)
     if (this.currentScore === 0) {
       // @ts-ignore TS2345

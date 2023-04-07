@@ -18,6 +18,7 @@ export class Score extends Container {
       lineJoin: 'bevel',
     })
     this.score = initialScore
+    this.animatedScore = initialScore
     this.text = new Text(this.score, style)
     this.text.anchor.set(0.5)
     this.addChild(this.text)
@@ -42,7 +43,7 @@ export class Score extends Container {
     await gsap.to(this, {
       animatedScore: this.score,
       duration: 0.7,
-      ease: 'expo.out',
+      ease: 'power1.inOut',
       onUpdate: () => {
         this.printPoints()
       },
