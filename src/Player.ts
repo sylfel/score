@@ -55,7 +55,6 @@ export class Player extends Container {
       fontName: 'Unlearned BRK',
       fontSize: 20,
     })
-    this.text.tint = 0x003eaa
     this.text.anchor.set(0.5, 0.5)
     this.addChild(this.text)
   }
@@ -100,9 +99,11 @@ export class Player extends Container {
     if (this.nextIncrement === 0) {
       this.text.text = ''
     } else {
+      const isPositif = Math.sign(this.nextIncrement) === 1
+      const color = isPositif ? 'deepskyblue' : 'firebrick'
       this.text.text =
-        (this.nextIncrement < 0 ? '-' : '+') +
-        String(Math.abs(this.nextIncrement))
+        (isPositif ? '+' : '-') + String(Math.abs(this.nextIncrement))
+      this.text.tint = color
       this.t = window.setTimeout(() => this.updateScore(), 1000)
     }
   }
