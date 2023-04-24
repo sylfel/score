@@ -5,7 +5,7 @@ import { initAssets } from './utils/assets'
 /** The PixiJS app Application instance, shared across the project */
 export const app = new Application<HTMLCanvasElement>({
   resolution: Math.max(window.devicePixelRatio, 2),
-  backgroundColor: 0xffffff,
+  backgroundColor: 0x000000,
 })
 
 let game: Game
