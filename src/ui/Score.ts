@@ -27,10 +27,13 @@ export class Score extends Container {
   }
 
   /** Set the score and play the scores animation */
-  public setScore(value: number) {
-    if (this.score === value) return
+  public async setScore(value: number): Promise<number> {
+    if (this.score === value) {
+      return Promise.resolve(value)
+    }
     this.score = value
-    void this.playScores()
+    await this.playScores()
+    return Promise.resolve(value)
   }
 
   /** Play score animation, increasing gradually until reaches actual score */

@@ -111,10 +111,16 @@ export class Player extends Container {
   private updateScore(): void {
     this.currentScore = Math.max(this.currentScore + this.nextIncrement, 0)
     this.updateIncrement(0)
-    this.score.setScore(this.currentScore)
-    if (this.currentScore === 0) {
-      // @ts-ignore TS2345
-      this.emit('lost', this)
-    }
+    this.score
+      .setScore(this.currentScore)
+      .then((value) => {
+        if (value === 0) {
+          // @ts-ignore TS2345
+          this.emit('lost', this)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 }
