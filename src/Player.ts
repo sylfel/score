@@ -1,4 +1,4 @@
-import { BitmapText, Container, Graphics, Text } from 'pixi.js'
+import { BitmapText, Container } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { LargeButton } from './ui/LargeButton'
@@ -10,8 +10,6 @@ const ratioY2 = (nbRow - 1) / nbRow
 
 export class Player extends Container {
   public readonly num: number
-
-  private rectangle: Graphics
 
   public onLost?: (player: Player) => void
 
@@ -33,9 +31,6 @@ export class Player extends Container {
 
     this.bg = new Background()
     this.addChild(this.bg)
-
-    this.rectangle = new Graphics()
-    this.addChild(this.rectangle)
 
     this.btnTLTexture = new LargeButton('btns_1', +1)
     this.btnTLTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
@@ -66,10 +61,6 @@ export class Player extends Container {
   }
 
   public resize(width: number, height: number) {
-    this.rectangle.clear()
-    this.rectangle.beginFill(0xff >> (this.num * 2), 0.2)
-    this.rectangle.drawRect(5, 5, width - 10, height - 10)
-
     this.bg.resize(width, height)
     this.score.resize(width, height * 0.5)
 
