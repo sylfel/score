@@ -2,6 +2,7 @@ import { BitmapText, Container } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { LargeButton } from './ui/LargeButton'
+import { Fx } from './ui/Fx'
 
 const nbRow = 12
 const heightBtn = nbRow / 2
@@ -24,6 +25,10 @@ export class Player extends Container {
   private btnBLTexture: LargeButton
   private btnBRTexture: LargeButton
   private text: BitmapText
+  private fx: Fx
+
+  private innerWidth = 0
+  private innerHeight = 0
 
   constructor(num: number) {
     super()
@@ -57,9 +62,28 @@ export class Player extends Container {
     })
     this.text.anchor.set(0.5, 0.5)
     this.addChild(this.text)
+
+    this.fx = new Fx('fx1_explosion_small_orange')
+    // this.fx = new Fx('fx2_electric_burst_large_violet')
+    this.fx.scale.set(2)
+    this.fx.anchor.set(0.5)
+  }
+
+  public playFx() {
+    this.fx.x = this.innerWidth * (Math.random() * 0.4 + 0.3)
+    this.fx.y = this.innerHeight * (Math.random() * 0.1 + 0.2)
+    this.addChild(this.fx)
+    this.fx.gotoAndPlay(0)
+    this.fx.onComplete = () => {
+      this.removeChild(this.fx)
+    }
   }
 
   public resize(width: number, height: number) {
+    this.innerWidth = width
+    this.innerHeight = height
+    this.fx.width = width * 0.25
+    this.fx.height = height * 0.25
     this.bg.resize(width, height)
     this.score.resize(width, height * 0.5)
 
@@ -109,6 +133,7 @@ export class Player extends Container {
   }
 
   private updateScore(): void {
+    this.playFx()
     this.currentScore = Math.max(this.currentScore + this.nextIncrement, 0)
     this.updateIncrement(0)
     this.score
