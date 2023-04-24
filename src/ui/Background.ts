@@ -22,7 +22,6 @@ export class Background extends Container {
     for (let i = 0; i < nbStars; i++) {
       const speed =
         maxSpeed - Math.floor(Math.log(Math.random() * Math.exp(maxSpeed) + 1))
-      console.log(speed)
       const graphic = new Graphics()
       graphic.beginFill(
         new Color({ h: 0, s: 0, l: (100 / maxSpeed) * speed }).toHex(),
