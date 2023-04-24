@@ -1,33 +1,29 @@
-import { Container, Text, TextStyle } from 'pixi.js'
+import { BitmapText, Container } from 'pixi.js'
 import gsap from 'gsap'
 
 export class Score extends Container {
-  private text: Text
+  private bitmapFontText: BitmapText
   private score = 0
   private animatedScore = 0
 
   constructor(initialScore: number) {
     super()
-    const style = new TextStyle({
-      fontFamily: 'Cursive',
-      fontSize: 5,
-      fontWeight: 'bold',
-      fill: ['#ffff00', '#00ff99'], // gradient
-      stroke: '#4a1850',
-      strokeThickness: 15,
-      lineJoin: 'bevel',
-    })
     this.score = initialScore
     this.animatedScore = initialScore
-    this.text = new Text(this.score, style)
-    this.text.anchor.set(0.5)
-    this.addChild(this.text)
+
+    this.bitmapFontText = new BitmapText(String(initialScore), {
+      fontName: 'Unlearned BRK',
+      fontSize: 20,
+    })
+    this.bitmapFontText.tint = 0x003eaa
+    this.bitmapFontText.anchor.set(0.5)
+    this.addChild(this.bitmapFontText)
   }
 
   public resize(width: number, height: number) {
-    this.text.y = height * 0.5
-    this.text.x = width * 0.5
-    this.text.style.fontSize = Math.max(width * 0.25, height * 0.25)
+    this.bitmapFontText.y = height * 0.5
+    this.bitmapFontText.x = width * 0.5
+    this.bitmapFontText.fontSize = Math.max(width * 0.4, height * 0.4)
   }
 
   /** Set the score and play the scores animation */
@@ -54,8 +50,8 @@ export class Score extends Container {
   private printPoints(): void {
     const points = Math.round(this.animatedScore)
     const text = String(points)
-    if (this.text.text !== text) {
-      this.text.text = text
+    if (this.bitmapFontText.text !== text) {
+      this.bitmapFontText.text = text
     }
   }
 }

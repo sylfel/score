@@ -1,4 +1,4 @@
-import { Container, Graphics, Text } from 'pixi.js'
+import { BitmapText, Container, Graphics, Text } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { LargeButton } from './ui/LargeButton'
@@ -25,7 +25,7 @@ export class Player extends Container {
   private btnTRTexture: LargeButton
   private btnBLTexture: LargeButton
   private btnBRTexture: LargeButton
-  private text: Text
+  private text: BitmapText
 
   constructor(num: number) {
     super()
@@ -56,7 +56,11 @@ export class Player extends Container {
     this.score = new Score(this.currentScore)
     this.addChild(this.score)
 
-    this.text = new Text()
+    this.text = new BitmapText('', {
+      fontName: 'Unlearned BRK',
+      fontSize: 20,
+    })
+    this.text.tint = 0x003eaa
     this.text.anchor.set(0.5, 0.5)
     this.addChild(this.text)
   }
@@ -91,7 +95,7 @@ export class Player extends Container {
 
     this.text.x = width * 0.5
     this.text.y = (height * (nbRow - 2)) / nbRow
-    this.text.style.fontSize = Math.max(width * 0.09, height * 0.09)
+    this.text.fontSize = Math.max(width * 0.09, height * 0.09)
   }
 
   private onBtnPress(increment: number): void {
