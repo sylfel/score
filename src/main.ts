@@ -1,4 +1,4 @@
-import { Application } from 'pixi.js'
+import { Application, BaseTexture, SCALE_MODES } from 'pixi.js'
 import { Game } from './Game'
 import { initAssets } from './utils/assets'
 
@@ -36,6 +36,7 @@ function resize() {
 
 /** Setup app and initialise assets */
 async function init(): Promise<void> {
+  BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
   // Add pixi canvas element (app.view) to the document's body
   document.body.appendChild(app.view)
   await initAssets()
