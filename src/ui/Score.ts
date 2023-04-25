@@ -1,4 +1,4 @@
-import { BitmapText, Container, utils } from 'pixi.js'
+import { BitmapText, Container } from 'pixi.js'
 import gsap from 'gsap'
 import { Fx } from './Fx'
 
@@ -38,7 +38,6 @@ export class Score extends Container {
 
   private playFx(diff: number) {
     const tl = gsap.timeline()
-    const count = 0
     if (diff > 0) {
       // increment
       tl.add(() => this.addFx(4).play(), 0)
