@@ -2,6 +2,7 @@ import { BitmapText, Container } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { LargeButton } from './ui/LargeButton'
+import { gsap } from 'gsap'
 
 const nbRow = 12
 const heightBtn = nbRow / 2
@@ -18,6 +19,9 @@ export class Player extends Container {
   private t = 0
   private score: Score
   private bg: Background
+
+  private innerHeight = 0
+  private isAnimating = false
 
   private btnTLTexture: LargeButton
   private btnTRTexture: LargeButton
@@ -60,6 +64,7 @@ export class Player extends Container {
   }
 
   public resize(width: number, height: number) {
+    this.innerHeight = height
     this.bg.resize(width, height)
     this.score.resize(width, height * 0.5)
 
@@ -89,7 +94,9 @@ export class Player extends Container {
   }
 
   private onBtnPress(increment: number): void {
-    this.updateIncrement(this.nextIncrement + increment)
+    if (!this.isAnimating) {
+      this.updateIncrement(this.nextIncrement + increment)
+    }
   }
 
   private updateIncrement(nextIncrment: number): void {
@@ -104,23 +111,36 @@ export class Player extends Container {
       this.text.text =
         (isPositif ? '+' : '-') + String(Math.abs(this.nextIncrement))
       this.text.tint = color
-      this.t = window.setTimeout(() => this.updateScore(), 1000)
+      this.t = window.setTimeout(() => this.updateScore(), 800)
     }
   }
 
   private updateScore(): void {
+    this.isAnimating = true
     this.currentScore = Math.max(this.currentScore + this.nextIncrement, 0)
+    gsap.killTweensOf(this.text)
+    const tween = gsap.to(this.text, {
+      duration: 0.5,
+      pixi: {
+        scaleY: 2,
+        scaleX: 0.2,
+      },
+      y: this.innerHeight * 0.25,
+      ease: 'expo.in',
+      onComplete: () => {
+        tween.revert()
+        void this.propagateScore()
+      },
+    })
+  }
+
+  private async propagateScore() {
     this.updateIncrement(0)
-    this.score
-      .setScore(this.currentScore)
-      .then((value) => {
-        if (value === 0) {
-          // @ts-ignore TS2345
-          this.emit('lost', this)
-        }
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    const newValue = await this.score.setScore(this.currentScore)
+    if (newValue === 0) {
+      // @ts-ignore TS2345
+      this.emit('lost', this)
+    }
+    this.isAnimating = false
   }
 }
