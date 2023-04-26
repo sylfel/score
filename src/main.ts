@@ -1,6 +1,9 @@
 import { Application, BaseTexture, SCALE_MODES } from 'pixi.js'
 import { Game } from './Game'
 import { initAssets } from './utils/assets'
+import * as PIXI from 'pixi.js'
+import { gsap } from 'gsap'
+import { PixiPlugin } from 'gsap/PixiPlugin'
 
 /** The PixiJS app Application instance, shared across the project */
 export const app = new Application<HTMLCanvasElement>({
@@ -36,6 +39,9 @@ function resize() {
 
 /** Setup app and initialise assets */
 async function init(): Promise<void> {
+  gsap.registerPlugin(PixiPlugin)
+  PixiPlugin.registerPIXI(PIXI)
+
   BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
   // Add pixi canvas element (app.view) to the document's body
   document.body.appendChild(app.view)
