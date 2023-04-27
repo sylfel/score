@@ -50,8 +50,8 @@ async function init(): Promise<void> {
   window.addEventListener('resize', resize)
   game = new Game()
 
-  resize()
   app.stage.addChild(game)
+  resize()
 }
 
 // Init everything
