@@ -1,10 +1,10 @@
 import { BitmapText } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
-import { LargeButton } from './ui/LargeButton'
 import { gsap } from 'gsap'
 import { formatNumber } from './utils/strings'
 import { ResizeContainer } from './ui/ResizeContainer'
+import { LargeNumberButton } from './ui/LargeNumberButton'
 
 const nbRow = 12
 const heightBtn = nbRow / 2
@@ -24,10 +24,10 @@ export class Player extends ResizeContainer {
 
   private isAnimating = false
 
-  private btnTLTexture: LargeButton
-  private btnTRTexture: LargeButton
-  private btnBLTexture: LargeButton
-  private btnBRTexture: LargeButton
+  private btnTLTexture: LargeNumberButton
+  private btnTRTexture: LargeNumberButton
+  private btnBLTexture: LargeNumberButton
+  private btnBRTexture: LargeNumberButton
   private text: BitmapText
 
   constructor(num: number) {
@@ -37,19 +37,19 @@ export class Player extends ResizeContainer {
     this.bg = new Background()
     this.addChild(this.bg)
 
-    this.btnTLTexture = new LargeButton('btns_1', +1)
+    this.btnTLTexture = new LargeNumberButton('btns_1', +1)
     this.btnTLTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnTLTexture)
 
-    this.btnTRTexture = new LargeButton('btns_2', +5)
+    this.btnTRTexture = new LargeNumberButton('btns_2', +5)
     this.btnTRTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnTRTexture)
 
-    this.btnBLTexture = new LargeButton('btns_3', -1)
+    this.btnBLTexture = new LargeNumberButton('btns_3', -1)
     this.btnBLTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnBLTexture)
 
-    this.btnBRTexture = new LargeButton('btns_4', -5)
+    this.btnBRTexture = new LargeNumberButton('btns_4', -5)
     this.btnBRTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnBRTexture)
 
