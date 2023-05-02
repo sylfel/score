@@ -25,6 +25,7 @@ export class Background extends ResizeContainer {
       )
       graphic.drawRect(0, 0, speed * 2, speed * 2)
       graphic.endFill()
+      graphic.angle = Math.random() * 360
 
       this.stars[i] = {
         speed,
@@ -50,6 +51,7 @@ export class Background extends ResizeContainer {
     for (let i = 0; i < nbStars; i++) {
       const g = this.stars[i].graphic
       g.y = g.y + Math.floor(this.stars[i].speed * delta)
+      g.angle += 0.5 * delta
       if (g.y > this.innerHeight) {
         g.y = 0
         g.x = Math.random() * this.innerWidth
