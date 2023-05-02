@@ -1,5 +1,4 @@
 import { BitmapText } from 'pixi.js'
-import gsap from 'gsap'
 import { fxManager } from './FxManager'
 import { ResizeContainer } from './ResizeContainer'
 
@@ -24,10 +23,16 @@ export class Score extends ResizeContainer {
 
   public resize(width: number, height: number) {
     super.resize(width, height)
+    this.pivot.set(width * 0.5, height * 0.5)
+    this.position.set(width * 0.5, height * 0.5)
 
     this.bitmapFontText.y = height * 0.5
     this.bitmapFontText.x = width * 0.5
     this.bitmapFontText.fontSize = Math.max(width * 0.4, height * 0.4)
+  }
+
+  public getScore(): number {
+    return this.score
   }
 
   /** Set the score and play the scores animation */
@@ -35,23 +40,9 @@ export class Score extends ResizeContainer {
     if (this.score === value) {
       return Promise.resolve(value)
     }
-    fxManager.playFx(this, value - this.score)
+    await fxManager.playFx(this, value, () => this.printPoints())
     this.score = value
-    await this.playScores()
-    return Promise.resolve(value)
-  }
-
-  /** Play score animation, increasing gradually until reaches actual score */
-  private async playScores(): Promise<void> {
-    gsap.killTweensOf(this)
-    await gsap.to(this, {
-      animatedScore: this.score,
-      duration: 0.7,
-      ease: 'power1.inOut',
-      onUpdate: () => {
-        this.printPoints()
-      },
-    })
+    return Promise.resolve(this.score)
   }
 
   /** Print currently animated score to the screen */
