@@ -12,6 +12,7 @@ interface Star {
 
 export class Background extends ResizeContainer {
   private stars: Star[]
+  private isPaused = false
 
   constructor() {
     super()
@@ -47,6 +48,9 @@ export class Background extends ResizeContainer {
 
   updateTransform(): void {
     super.updateTransform()
+    if (this.isPaused) {
+      return
+    }
     const delta = app.ticker.deltaTime
     for (let i = 0; i < nbStars; i++) {
       const g = this.stars[i].graphic
@@ -57,5 +61,9 @@ export class Background extends ResizeContainer {
         g.x = Math.random() * this.innerWidth
       }
     }
+  }
+
+  public pause(isPaused = true) {
+    this.isPaused = isPaused
   }
 }
