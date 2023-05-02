@@ -1,16 +1,17 @@
-import { BitmapText, Container } from 'pixi.js'
+import { BitmapText } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { LargeButton } from './ui/LargeButton'
 import { gsap } from 'gsap'
 import { formatNumber } from './utils/strings'
+import { ResizeContainer } from './ui/ResizeContainer'
 
 const nbRow = 12
 const heightBtn = nbRow / 2
 const ratioY1 = (nbRow - 3) / nbRow
 const ratioY2 = (nbRow - 1) / nbRow
 
-export class Player extends Container {
+export class Player extends ResizeContainer {
   public readonly num: number
 
   public onLost?: (player: Player) => void
@@ -21,7 +22,6 @@ export class Player extends Container {
   private score: Score
   private bg: Background
 
-  private innerHeight = 0
   private isAnimating = false
 
   private btnTLTexture: LargeButton
@@ -65,7 +65,7 @@ export class Player extends Container {
   }
 
   public resize(width: number, height: number) {
-    this.innerHeight = height
+    super.resize(width, height)
     this.bg.resize(width, height)
     this.score.resize(width, height * 0.5)
 

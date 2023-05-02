@@ -1,5 +1,6 @@
-import { Color, Container, Graphics } from 'pixi.js'
+import { Color, Graphics } from 'pixi.js'
 import { app } from '../main'
+import { ResizeContainer } from './ResizeContainer'
 
 const nbStars = 100
 const maxSpeed = 3
@@ -9,15 +10,11 @@ interface Star {
   graphic: Graphics
 }
 
-export class Background extends Container {
+export class Background extends ResizeContainer {
   private stars: Star[]
-  private innerHeight: number
-  private innerWidth: number
 
   constructor() {
     super()
-    this.innerHeight = 0
-    this.innerWidth = 0
     this.stars = new Array(nbStars) as Star[]
     for (let i = 0; i < nbStars; i++) {
       const speed =
@@ -39,8 +36,7 @@ export class Background extends Container {
   }
 
   public resize(width: number, height: number) {
-    this.innerHeight = height
-    this.innerWidth = width
+    super.resize(width, height)
 
     for (let i = 0; i < nbStars; i++) {
       this.stars[i].graphic.x = Math.random() * width

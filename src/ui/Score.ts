@@ -1,12 +1,12 @@
-import { BitmapText, Container, Rectangle } from 'pixi.js'
+import { BitmapText } from 'pixi.js'
 import gsap from 'gsap'
 import { fxManager } from './FxManager'
+import { ResizeContainer } from './ResizeContainer'
 
-export class Score extends Container {
+export class Score extends ResizeContainer {
   private bitmapFontText: BitmapText
   private score = 0
   private animatedScore = 0
-  private size: Rectangle
 
   constructor(initialScore: number) {
     super()
@@ -20,12 +20,10 @@ export class Score extends Container {
     this.bitmapFontText.tint = 0x003eaa
     this.bitmapFontText.anchor.set(0.5)
     this.addChild(this.bitmapFontText)
-    this.size = new Rectangle(0, 0)
   }
 
   public resize(width: number, height: number) {
-    this.size.width = width
-    this.size.height = height
+    super.resize(width, height)
 
     this.bitmapFontText.y = height * 0.5
     this.bitmapFontText.x = width * 0.5
@@ -37,7 +35,7 @@ export class Score extends Container {
     if (this.score === value) {
       return Promise.resolve(value)
     }
-    fxManager.playFx(this, value - this.score, this.size)
+    fxManager.playFx(this, value - this.score, this.innerSize)
     this.score = value
     await this.playScores()
     return Promise.resolve(value)
