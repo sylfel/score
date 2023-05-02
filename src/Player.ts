@@ -1,4 +1,4 @@
-import { BitmapText } from 'pixi.js'
+import { BitmapText, BlurFilter } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { gsap } from 'gsap'
@@ -23,6 +23,7 @@ export class Player extends ResizeContainer {
   private bg: Background
 
   private isAnimating = false
+  private isPaused = false
 
   private btnTLTexture: LargeNumberButton
   private btnTRTexture: LargeNumberButton
@@ -95,7 +96,7 @@ export class Player extends ResizeContainer {
   }
 
   private onBtnPress(increment: number): void {
-    if (!this.isAnimating) {
+    if (!this.isAnimating && !this.isPaused) {
       this.updateIncrement(this.nextIncrement + increment)
     }
   }
@@ -142,5 +143,26 @@ export class Player extends ResizeContainer {
       this.emit('lost', this)
     }
     this.isAnimating = false
+  }
+
+  private pause(isPaused = true) {
+    this.isPaused = isPaused
+    this.bg.pause(isPaused)
+  }
+
+  public win() {
+    this.pause()
+  }
+
+  public lost() {
+    this.pause()
+    this.filters = [new BlurFilter(4)]
+  }
+
+  public async reset() {
+    this.currentScore = 50
+    await this.score.setScore(50, false)
+    this.pause(false)
+    this.filters = []
   }
 }

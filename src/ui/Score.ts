@@ -36,11 +36,16 @@ export class Score extends ResizeContainer {
   }
 
   /** Set the score and play the scores animation */
-  public async setScore(value: number): Promise<number> {
+  public async setScore(value: number, doAnimation = true): Promise<number> {
     if (this.score === value) {
       return Promise.resolve(value)
     }
-    await fxManager.playFx(this, value, () => this.printPoints())
+    if (doAnimation) {
+      await fxManager.playFx(this, value, () => this.printPoints())
+    } else {
+      this.animatedScore = value
+      this.printPoints()
+    }
     this.score = value
     return Promise.resolve(this.score)
   }
