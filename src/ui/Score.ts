@@ -35,7 +35,7 @@ export class Score extends ResizeContainer {
     if (this.score === value) {
       return Promise.resolve(value)
     }
-    fxManager.playFx(this, value - this.score, this.innerSize)
+    fxManager.playFx(this, value - this.score)
     this.score = value
     await this.playScores()
     return Promise.resolve(value)
