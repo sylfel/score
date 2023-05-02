@@ -3,6 +3,7 @@ import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { LargeButton } from './ui/LargeButton'
 import { gsap } from 'gsap'
+import { formatNumber } from './utils/strings'
 
 const nbRow = 12
 const heightBtn = nbRow / 2
@@ -108,8 +109,7 @@ export class Player extends Container {
     } else {
       const isPositif = Math.sign(this.nextIncrement) === 1
       const color = isPositif ? 'deepskyblue' : 'firebrick'
-      this.text.text =
-        (isPositif ? '+' : '-') + String(Math.abs(this.nextIncrement))
+      this.text.text = formatNumber(this.nextIncrement)
       this.text.tint = color
       this.t = window.setTimeout(() => this.updateScore(), 800)
     }
