@@ -38,7 +38,19 @@ class FxManager {
   }
 
   private incrementAnimation(tl: gsap.core.Timeline, container: Score) {
-    tl.add(() => this.addFx(container, 4).play(), 0)
+    const fx = this.addFx(container, 4, false)
+    tl.to(
+      fx,
+      {
+        onStart: () => fx.play(),
+        duration: 1.5,
+        width: container.innerWidth,
+        height: container.innerHeight,
+        alpha: 0,
+        ease: 'slow(0.7, 0.7, false)',
+      },
+      0,
+    )
   }
 
   private decrementAnimation(
@@ -76,14 +88,19 @@ class FxManager {
     )
   }
 
-  private addFx(container: ResizeContainer, type: number): Fx {
+  private addFx(container: ResizeContainer, type: number, random = true): Fx {
     const fx = new Fx(this.getNameFxFromNumber(type))
     fx.anchor.set(0.5)
-    fx.angle = Math.random() * 90 - 45
     const { width, height } = container.innerSize
     fx.scale.set(width / (fx.texture.width * 3))
-    fx.x = width * this.getRandomArbitrary(0.25, 0.75)
-    fx.y = height * this.getRandomArbitrary(0.25, 0.75)
+    if (random) {
+      fx.angle = Math.random() * 90 - 45
+      fx.x = width * this.getRandomArbitrary(0.25, 0.75)
+      fx.y = height * this.getRandomArbitrary(0.25, 0.75)
+    } else {
+      fx.x = width * 0.5
+      fx.y = height * 0.5
+    }
     fx.currentFrame = 0
     container.addChild(fx)
     fx.onComplete = () => {
