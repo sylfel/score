@@ -31,10 +31,10 @@ export class Game extends ResizeContainer {
       this.players[i].position.x = i * playerWidth
       this.players[i].resize(playerWidth, height)
     }
-    this.resetBtn.width = width * 0.8
-    this.resetBtn.height = height * 0.15
+    this.resetBtn.width = width * 0.6
+    this.resetBtn.height = height * 0.2
     this.resetBtn.x = width * 0.5
-    this.resetBtn.y = height * 0.55
+    this.resetBtn.y = height * 0.7
   }
 
   private onLost(playerLost: Player) {

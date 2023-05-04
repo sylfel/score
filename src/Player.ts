@@ -1,4 +1,4 @@
-import { BitmapText, BlurFilter } from 'pixi.js'
+import { BitmapText } from 'pixi.js'
 import { Score } from './ui/Score'
 import { Background } from './ui/Background'
 import { gsap } from 'gsap'
@@ -148,6 +148,18 @@ export class Player extends ResizeContainer {
   private pause(isPaused = true) {
     this.isPaused = isPaused
     this.bg.pause(isPaused)
+    gsap.to(
+      [
+        this.btnTLTexture,
+        this.btnTRTexture,
+        this.btnBLTexture,
+        this.btnBRTexture,
+      ],
+      {
+        alpha: isPaused ? 0 : 1,
+        duration: 0.4,
+      },
+    )
   }
 
   public win() {
@@ -156,7 +168,6 @@ export class Player extends ResizeContainer {
 
   public lost() {
     this.pause()
-    this.filters = [new BlurFilter(4)]
   }
 
   public async reset() {
