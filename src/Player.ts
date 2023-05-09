@@ -5,6 +5,7 @@ import { gsap } from 'gsap'
 import { formatNumber } from './utils/strings'
 import { ResizeContainer } from './ui/ResizeContainer'
 import { LargeNumberButton } from './ui/LargeNumberButton'
+import { userSettings } from './UserSettings'
 
 const nbRow = 12
 const heightBtn = nbRow / 2
@@ -16,7 +17,7 @@ export class Player extends ResizeContainer {
 
   public onLost?: (player: Player) => void
 
-  private currentScore = 50
+  private currentScore = userSettings.initialScore
   private nextIncrement = 0
   private t = 0
   private score: Score
@@ -38,19 +39,31 @@ export class Player extends ResizeContainer {
     this.bg = new Background()
     this.addChild(this.bg)
 
-    this.btnTLTexture = new LargeNumberButton('btns_1', +1)
+    this.btnTLTexture = new LargeNumberButton(
+      'btns_1',
+      userSettings.lowInterval,
+    )
     this.btnTLTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnTLTexture)
 
-    this.btnTRTexture = new LargeNumberButton('btns_2', +5)
+    this.btnTRTexture = new LargeNumberButton(
+      'btns_2',
+      userSettings.highInterval,
+    )
     this.btnTRTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnTRTexture)
 
-    this.btnBLTexture = new LargeNumberButton('btns_3', -1)
+    this.btnBLTexture = new LargeNumberButton(
+      'btns_3',
+      userSettings.lowInterval * -1,
+    )
     this.btnBLTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnBLTexture)
 
-    this.btnBRTexture = new LargeNumberButton('btns_4', -5)
+    this.btnBRTexture = new LargeNumberButton(
+      'btns_4',
+      userSettings.highInterval * -1,
+    )
     this.btnBRTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnBRTexture)
 
@@ -171,8 +184,8 @@ export class Player extends ResizeContainer {
   }
 
   public async reset() {
-    this.currentScore = 50
-    await this.score.setScore(50, false)
+    this.currentScore = userSettings.initialScore
+    await this.score.setScore(userSettings.initialScore, false)
     this.pause(false)
     this.filters = []
   }
