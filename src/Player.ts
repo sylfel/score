@@ -1,11 +1,11 @@
 import { BitmapText } from 'pixi.js'
 import { Score } from './ui/Score'
-import { Background } from './ui/Background'
 import { gsap } from 'gsap'
 import { formatNumber } from './utils/strings'
 import { ResizeContainer } from './ui/ResizeContainer'
 import { LargeNumberButton } from './ui/LargeNumberButton'
 import { userSettings } from './UserSettings'
+import { themeManager } from './ThemeManager'
 
 const nbRow = 12
 const heightBtn = nbRow / 2
@@ -21,7 +21,6 @@ export class Player extends ResizeContainer {
   private nextIncrement = 0
   private t = 0
   private score: Score
-  private bg: Background
 
   private isAnimating = false
   private isPaused = false
@@ -36,32 +35,29 @@ export class Player extends ResizeContainer {
     super()
     this.num = num
 
-    this.bg = new Background()
-    this.addChild(this.bg)
-
     this.btnTLTexture = new LargeNumberButton(
-      'btns_1',
+      themeManager.getLowIntervalPos(),
       userSettings.lowInterval,
     )
     this.btnTLTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnTLTexture)
 
     this.btnTRTexture = new LargeNumberButton(
-      'btns_2',
+      themeManager.getHighIntervalPos(),
       userSettings.highInterval,
     )
     this.btnTRTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnTRTexture)
 
     this.btnBLTexture = new LargeNumberButton(
-      'btns_3',
+      themeManager.getLowIntervalNeg(),
       userSettings.lowInterval * -1,
     )
     this.btnBLTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
     this.addChild(this.btnBLTexture)
 
     this.btnBRTexture = new LargeNumberButton(
-      'btns_4',
+      themeManager.getHighIntervalNeg(),
       userSettings.highInterval * -1,
     )
     this.btnBRTexture.onPress.connect((btn) => this.onBtnPress(btn?.value || 0))
@@ -80,7 +76,6 @@ export class Player extends ResizeContainer {
 
   public resize(width: number, height: number) {
     super.resize(width, height)
-    this.bg.resize(width, height)
     this.score.resize(width, height * 0.5)
 
     this.btnTLTexture.width = width / 2
@@ -160,7 +155,6 @@ export class Player extends ResizeContainer {
 
   private pause(isPaused = true) {
     this.isPaused = isPaused
-    this.bg.pause(isPaused)
     gsap.to(
       [
         this.btnTLTexture,

@@ -1,12 +1,15 @@
 import { Player } from './Player'
 import { ResizeContainer } from './ui/ResizeContainer'
 import { LargeButton } from './ui/LargeButton'
+import { themeManager } from './ThemeManager'
+import { IBackground } from './ui/IBackground'
 
 const nbGamer = 2
 
 export class Game extends ResizeContainer {
   private players: Player[] = []
   private resetBtn: LargeButton
+  private bg: IBackground
 
   constructor() {
     super()
@@ -19,13 +22,17 @@ export class Game extends ResizeContainer {
       this.addChild(player)
     }
 
-    this.resetBtn = new LargeButton('btn', 'Reset')
+    this.bg = themeManager.getBackground()
+    this.addChild(this.bg)
+
+    this.resetBtn = new LargeButton(themeManager.getResetBtn(), 'Reset')
     this.resetBtn.anchor.set(0.5)
     this.resetBtn.onPress.connect(() => this.onReset())
   }
 
   public resize(width: number, height: number) {
     super.resize(width, height)
+    this.bg.resize(width, height)
     const playerWidth = Math.floor(width / nbGamer)
     for (let i = 0; i < nbGamer; i++) {
       this.players[i].position.x = i * playerWidth
@@ -46,6 +53,7 @@ export class Game extends ResizeContainer {
         player.win()
       }
     }
+    this.bg.pause(true)
     this.addChild(this.resetBtn)
   }
 
@@ -55,6 +63,7 @@ export class Game extends ResizeContainer {
       promises.push(this.players[i].reset())
     }
     void Promise.all(promises).then(() => {
+      this.bg.pause(false)
       this.removeChild(this.resetBtn)
     })
   }

@@ -1,6 +1,7 @@
 import { Container, Rectangle } from 'pixi.js'
+import { IResize } from './IResize'
 
-export class ResizeContainer extends Container {
+export class ResizeContainer extends Container implements IResize {
   private _innerSize: Rectangle = new Rectangle()
 
   public resize(width: number, height: number) {

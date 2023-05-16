@@ -1,7 +1,8 @@
 import { Fx } from './Fx'
 import { gsap } from 'gsap'
-import { ResizeContainer } from './ResizeContainer'
 import { Score } from './Score'
+import { IResize } from './IResize'
+import { Container } from 'pixi.js'
 
 class FxManager {
   private mapFx: Map<number, string> = new Map([
@@ -88,7 +89,11 @@ class FxManager {
     )
   }
 
-  private addFx(container: ResizeContainer, type: number, random = true): Fx {
+  private addFx(
+    container: IResize & Container,
+    type: number,
+    random = true,
+  ): Fx {
     const fx = new Fx(this.getNameFxFromNumber(type))
     fx.anchor.set(0.5)
     const { width, height } = container.innerSize
