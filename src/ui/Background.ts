@@ -1,6 +1,7 @@
 import { Color, Graphics } from 'pixi.js'
 import { app } from '../main'
 import { ResizeContainer } from './ResizeContainer'
+import { IBackground } from './IBackground'
 
 const nbStars = 100
 const maxSpeed = 3
@@ -10,7 +11,7 @@ interface Star {
   graphic: Graphics
 }
 
-export class Background extends ResizeContainer {
+export class Background extends ResizeContainer implements IBackground {
   private stars: Star[]
   private isPaused = false
 
