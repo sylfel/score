@@ -5,7 +5,7 @@ import { pixiTexturePacker } from '@assetpack/plugin-texture-packer'
 export default {
   entry: './raw-assets',
   output: './public/assets/',
-  ignore: ['**/*.kra*'],
+  ignore: ['**/*.kra*', '**/src'],
   cache: false,
   plugins: {
     compressPng: compressPng(),
